@@ -28,8 +28,8 @@ function App() {
       oWins: localStorage.getItem('oWins') || 0,
       draw: localStorage.getItem('draw') || 0,
       dateCreated: new Date().toISOString(),
-      xPlayerName: localStorage.getItem('playerX') || '',
-      oPlayerName: localStorage.getItem('playerO') || '',
+      xPlayerName: localStorage.getItem('playerX'),
+      oPlayerName: localStorage.getItem('playerO'),
     };
   
     try {
