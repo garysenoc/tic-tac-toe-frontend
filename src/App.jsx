@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Swal from "sweetalert2";
 import { useNavigate  } from "react-router-dom";
+import useLocalStorage from "use-local-storage";
 
 function App() {
   const [board, setBoard] = useState(Array(9).fill(null));
@@ -9,6 +10,12 @@ function App() {
   const [winner, setWinner] = useState(null);
   const navigate = useNavigate();
   
+  const [playerX, setPlayerX] = useLocalStorage("playerX");
+  const [playerO, setPlayerO] = useLocalStorage("playerO");
+  const [xWins, setXwins] = useLocalStorage("xWins", null);
+  const [oWins, setOwins] = useLocalStorage("oWins", null);
+  const [draw, setDraw] = useLocalStorage("draw",null);
+
   useEffect(() => {
     const xWins = localStorage.getItem('xWins');
     const oWins = localStorage.getItem('oWins');
@@ -16,20 +23,20 @@ function App() {
 
     // Initialize local storage values if they are missing
     if (xWins === null || oWins === null || draw === null) {
-      localStorage.setItem('xWins', 0);
-      localStorage.setItem('oWins', 0);
-      localStorage.setItem('draw', 0);
+      setXwins('xWins', 0);
+      setOwins('oWins', 0);
+      setDraw('draw', 0);
     }
-  }, []);
+  }, [setDraw, setOwins, setXwins]);
 
   const createHistory = async () => {
     const body = {
-      xWins:  localStorage.getItem('xWins') || 0,
-      oWins: localStorage.getItem('oWins') || 0,
-      draw: localStorage.getItem('draw') || 0,
+      xWins: xWins || 0,
+      oWins: oWins || 0,
+      draw: draw || 0,
       dateCreated: new Date().toISOString(),
-      xPlayerName: localStorage.getItem('playerX'),
-      oPlayerName: localStorage.getItem('playerO'),
+      xPlayerName: playerX,
+      oPlayerName:playerO,
     };
   
     try {
@@ -130,17 +137,17 @@ function App() {
     if (gameWinner) {
       setWinner(gameWinner);
       if (gameWinner === 'X') {
-        const getXwins = localStorage.getItem('xWins');
-        localStorage.setItem('xWins', getXwins + 1);
+        const getXwins = xWins;
+        setXwins(getXwins + 1);
       } else if (gameWinner === 'O') {
-        const getOwins = localStorage.getItem('oWins');
-        localStorage.setItem('oWins', getOwins + 1);
+        const getOwins = oWins;
+       setOwins(getOwins + 1);
       }
 
       continueStopModal(gameWinner);
     } else if (newBoard.every((square) => square)) {
-      const getDraw = localStorage.getItem('draw');
-      localStorage.setItem('draw', getDraw + 1);
+      const getDraw = draw;
+      setDraw(getDraw + 1);
 
       continueStopModal('Draw');
     }
