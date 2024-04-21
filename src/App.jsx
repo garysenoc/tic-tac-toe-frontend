@@ -10,7 +10,6 @@ function App() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    alert(ls.get('playerX') + ' '+ ls.get('playerO'))
     const xWins = ls.get('xWins');
     const oWins = ls.get('oWins');
     const draw = ls.get('draw');
