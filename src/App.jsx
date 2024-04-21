@@ -16,7 +16,7 @@ function App() {
 
     // Initialize local storage values if they are missing
     if (xWins === null || oWins === null || draw === null) {
-      localStorage. localStorage.setItem('xWins', 0);
+      localStorage.setItem('xWins', 0);
       localStorage.setItem('oWins', 0);
       localStorage.setItem('draw', 0);
     }
