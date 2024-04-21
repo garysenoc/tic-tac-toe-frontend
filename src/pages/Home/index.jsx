@@ -9,8 +9,14 @@ const Home = () => {
   const navigation = useNavigate();
   useEffect(()=>{
   clear();
-  fetchHistory()
-  },[]);
+  fetchHistory();
+  const timeoutId = setTimeout(() => {
+    fetchHistory();
+  }, 1000);
+
+  // Clear timeout if the component unmounts before the timeout fires
+  return () => clearTimeout(timeoutId);
+  },[games]);
 
   const fetchHistory = async () => {
     try {
