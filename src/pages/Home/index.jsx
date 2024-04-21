@@ -138,7 +138,6 @@ const Home = () => {
         const playerName = result.value;
         console.log(`Player name submitted: ${playerName}`);
         startGameModal();
-        navigation('/play')
       }
     });
   };
@@ -154,7 +153,7 @@ const Home = () => {
       allowEscapeKey: false, 
     }).then((result) => {
       if (result.isConfirmed) {
-      
+        navigation('/play')
         console.log("Game started");
       
       }
