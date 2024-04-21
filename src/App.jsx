@@ -2,41 +2,35 @@ import { useState, useEffect } from 'react';
 import './App.css';
 import Swal from "sweetalert2";
 import { useNavigate  } from "react-router-dom";
-import useLocalStorage from "use-local-storage";
-
+import * as ls from "local-storage";
 function App() {
   const [board, setBoard] = useState(Array(9).fill(null));
   const [xIsNext, setXIsNext] = useState(true);
   const [winner, setWinner] = useState(null);
   const navigate = useNavigate();
-  
-  const [playerX, setPlayerX] = useLocalStorage("playerX");
-  const [playerO, setPlayerO] = useLocalStorage("playerO");
-  const [xWins, setXwins] = useLocalStorage("xWins", null);
-  const [oWins, setOwins] = useLocalStorage("oWins", null);
-  const [draw, setDraw] = useLocalStorage("draw",null);
 
   useEffect(() => {
-    const xWins = localStorage.getItem('xWins');
-    const oWins = localStorage.getItem('oWins');
-    const draw = localStorage.getItem('draw');
+    alert(ls.get('playerX') + ' '+ ls.get('playerO'))
+    const xWins = ls.get('xWins');
+    const oWins = ls.get('oWins');
+    const draw = ls.get('draw');
 
     // Initialize local storage values if they are missing
     if (xWins === null || oWins === null || draw === null) {
-      setXwins('xWins', 0);
-      setOwins('oWins', 0);
-      setDraw('draw', 0);
+      ls.set('xWins', 0);
+      ls.set('oWins', 0);
+      ls.set('draw', 0);
     }
-  }, [setDraw, setOwins, setXwins]);
+  },[]);
 
   const createHistory = async () => {
     const body = {
-      xWins: xWins || 0,
-      oWins: oWins || 0,
-      draw: draw || 0,
+      xWins: ls.get('xWins') || 0,
+      oWins: ls.get('oWins') || 0,
+      draw: ls.get('draw') || 0,
       dateCreated: new Date().toISOString(),
-      xPlayerName: playerX,
-      oPlayerName:playerO,
+      xPlayerName: ls.get('playerX'),
+      oPlayerName:ls.get('playerO'),
     };
   
     try {
@@ -137,18 +131,16 @@ function App() {
     if (gameWinner) {
       setWinner(gameWinner);
       if (gameWinner === 'X') {
-        const getXwins = xWins;
-        setXwins(getXwins + 1);
+        const getXwins = ls.get('xWins');
+       ls.set('xWins',getXwins + 1);
       } else if (gameWinner === 'O') {
-        const getOwins = oWins;
-       setOwins(getOwins + 1);
+        const getXwins = ls.get('oWins');
+        ls.set('oWins',getXwins + 1);
       }
-
-      continueStopModal(gameWinner);
+      continueStopModal(gameWinner)
     } else if (newBoard.every((square) => square)) {
-      const getDraw = draw;
-      setDraw(getDraw + 1);
-
+      const getXwins = ls.get('draw');
+      ls.set('draw',getXwins + 1);
       continueStopModal('Draw');
     }
   };

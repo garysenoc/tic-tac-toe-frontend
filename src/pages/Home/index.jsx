@@ -2,13 +2,13 @@
 import  { useState, useEffect } from "react";
 import Swal from "sweetalert2";
 import { useNavigate  } from "react-router-dom";
-import {set, clear} from "local-storage";
+import * as ls from "local-storage";
 
 const Home = () => {
   const [games, setGames] = useState([]);
   const navigation = useNavigate();
+
   useEffect(()=>{
-  clear();
   fetchHistory();
   const timeoutId = setTimeout(() => {
     fetchHistory();
@@ -91,7 +91,7 @@ const Home = () => {
       preConfirm: (name) => {
         if (name) {
           console.log(`Player name entered: ${name}`);
-          set('playerX', name)
+      
           playerOName();
 
           return name;
@@ -103,6 +103,7 @@ const Home = () => {
     }).then((result) => {
       if (result.isConfirmed) {
         const playerName = result.value;
+        ls.set('playerX',playerName)
         console.log(`Player name submitted: ${playerName}`);
        
       }
@@ -125,8 +126,6 @@ const Home = () => {
         if (name) {
       
           console.log(`Player name entered: ${name}`);
-          set('playerO', name)
-       
           return name;
         } else {
           Swal.showValidationMessage("Player name is required");
@@ -137,7 +136,10 @@ const Home = () => {
       if (result.isConfirmed) {
         const playerName = result.value;
         console.log(`Player name submitted: ${playerName}`);
+        ls.set('playerO',playerName)
         startGameModal();
+        console.log( ls.get('playerX'),  ls.get('playerO'))
+      
       }
     });
   };
@@ -153,9 +155,9 @@ const Home = () => {
       allowEscapeKey: false, 
     }).then((result) => {
       if (result.isConfirmed) {
+  
+        console.log("Game starte11d");
         navigation('/play')
-        console.log("Game started");
-      
       }
     });
   };
